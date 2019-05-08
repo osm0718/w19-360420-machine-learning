@@ -10,7 +10,11 @@ public class kNNMain{
 
     // TASK 1: Use command line arguments to point DataSet.readDataSet method to
     // the desired file. Choose a given DataPoint, and print its features and label
+    DataSet pt = new DataSet();
 
+    pt.readDataSet(args[0]);
+
+    printDataSet(pt);
 
 
     //TASK 2:Use the DataSet class to split the fullDataSet into Training and Held Out Test Dataset
