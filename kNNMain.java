@@ -21,14 +21,18 @@ public class kNNMain{
 
 
     //TASK 2:Use the DataSet class to split the dataSetSet into Training and Held Out Test Dataset
-    List<DataPoint> testSet = DataSet.getTestSet(dataSet, 0.8);
-    List<DataPoint> trainSet = DataSet.getTrainingSet(dataSet, 0.2);
+    List<DataPoint> testSet = DataSet.getTestSet(dataSet, 0.2);
+    List<DataPoint> trainSet = DataSet.getTrainingSet(dataSet, 0.8);
 
 
     // TASK 4: write a new method in DataSet.java which takes as arguments to DataPoint objects,
     // and returns the Euclidean distance between those two points (as a double)
+    DataPoint pt1 = dataSet.get(0);
+    DataPoint pt2 = dataSet.get(1);
 
+    double dist = DataSet.distanceEuclid(pt1, pt2);
 
+    System.out.println(dist);
 
     // TASK 5: Use the KNNClassifier class to determine the k nearest neighbors to a given DataPoint,
     // and make a print a predicted target label
