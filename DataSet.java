@@ -252,11 +252,11 @@ public class DataSet {
   public static double distanceEuclid(DataPoint p1, DataPoint p2)
   {
     double sum = 0;
-    for(int i=1;i<5;i++)
+    for(int i=1;i<p1.getX().length;i++)
     {
       sum += Math.pow(((p1.getX())[i])-((p2.getX())[i]), 2);
     }
-    double distance = Math.pow(sum,0.5);
+    double distance = Math.pow(sum,0.5); 
 
     return distance;
   }

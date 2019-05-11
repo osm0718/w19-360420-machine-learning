@@ -12,7 +12,7 @@ public class kNNMain{
     // the desired file. Choose a given DataPoint, and print its features and label
     List<DataPoint> dataSet = DataSet.readDataSet(args[0]);
 
-    DataPoint point =  dataSet.get(0);
+    DataPoint point = dataSet.get(0);
 
     System.out.print(point.getLabel());
     
@@ -35,13 +35,48 @@ public class kNNMain{
     System.out.println(dist);
 
     // TASK 5: Use the KNNClassifier class to determine the k nearest neighbors to a given DataPoint,
-    // and make a print a predicted target label
+    // and print a predicted target label
+    KNNClassifier knn = new KNNClassifier(3);
 
+    String prediction = knn.predict(trainSet, point);
 
-
+    System.out.println(prediction);
     // TASK 6: loop over the datapoints in the held out test set, and make predictions for Each
     // point based on nearest neighbors in training set. Calculate accuracy of model.
+    DataPoint testPredict = dataSet.get(0);
+    double ctr = 0.;
+    double[] accuracy = new double[1000];
+    
+    for (int j=0;j<1000;j++)
+    {
+        ctr = 0;
+        List<DataPoint> trainer = DataSet.getTrainingSet(dataSet, 0.8);
 
+        
+        for (int i=0; i<trainer.size();i++)
+        {
+            testPredict = trainer.get(i);
+            
+            String guess = knn.predict(trainer, testPredict);
+
+            if(guess.equals(testPredict.getLabel()))
+                ctr++;
+        }
+        
+        accuracy[j] = ctr / trainer.size() * 100;    
+
+        System.out.println("Generation " + j + " : " + accuracy[j]);
+    }
+    
+    double sum = 0;
+    for(int k=0;k<1000;k++)
+    {
+        sum += accuracy[k];
+    }
+
+    double avgAcc = sum / 1000;
+
+    System.out.println("Average accuracy over 1000 generations: " + avgAcc);
 
   }
 
