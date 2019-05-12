@@ -74,9 +74,12 @@ public class kNNMain{
         sum += accuracy[k];
     }
 
-    double avgAcc = sum / 1000;
+    double meanAccuracy = mean(accuracy);
+    double stdevAccuracy = standardDeviation(accuracy);
 
-    System.out.println("Average accuracy over 1000 generations: " + avgAcc);
+    System.out.println("Results over 1000 generation: ");
+    System.out.println("Average accuracy: " + meanAccuracy);
+    System.out.println("Standard deviation:" + stdevAccuracy);
 
   }
 
