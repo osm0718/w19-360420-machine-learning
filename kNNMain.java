@@ -27,20 +27,17 @@ public class kNNMain{
 
     // TASK 4: write a new method in DataSet.java which takes as arguments to DataPoint objects,
     // and returns the Euclidean distance between those two points (as a double)
-    DataPoint pt1 = dataSet.get(0);
-    DataPoint pt2 = dataSet.get(1);
 
-    double dist = DataSet.distanceEuclid(pt1, pt2);
-
-    System.out.println(dist);
 
     // TASK 5: Use the KNNClassifier class to determine the k nearest neighbors to a given DataPoint,
     // and print a predicted target label
-    KNNClassifier knn = new KNNClassifier(3);
+    KNNClassifier knn = new KNNClassifier(5);
 
-    String prediction = knn.predict(trainSet, point);
+    String prediction = knn.predict(dataSet, point);
 
     System.out.println(prediction);
+
+
     // TASK 6: loop over the datapoints in the held out test set, and make predictions for Each
     // point based on nearest neighbors in training set. Calculate accuracy of model.
     DataPoint testPredict = dataSet.get(0);
@@ -65,7 +62,7 @@ public class kNNMain{
         
         accuracy[j] = ctr / trainer.size() * 100;    
 
-        System.out.println("Generation " + j + " : " + accuracy[j]);
+        System.out.println("Generation " + (j+1) + " : " + accuracy[j]);
     }
     
     double sum = 0;
@@ -77,11 +74,13 @@ public class kNNMain{
     double meanAccuracy = mean(accuracy);
     double stdevAccuracy = standardDeviation(accuracy);
 
+    System.out.println("-----------------------------------\n");
     System.out.println("Results over 1000 generation: ");
     System.out.println("Average accuracy: " + meanAccuracy);
     System.out.println("Standard deviation:" + stdevAccuracy);
 
   }
+
 
   public static double mean(double[] arr){
     /*
