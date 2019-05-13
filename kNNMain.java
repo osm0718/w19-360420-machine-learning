@@ -22,8 +22,8 @@ public class kNNMain{
 
 
 		//TASK 2:Use the DataSet class to split the dataSetSet into Training and Held Out Test Dataset
-		List<DataPoint> testSet = DataSet.getTestSet(dataSet, 0.2);
-		List<DataPoint> trainSet = DataSet.getTrainingSet(dataSet, 0.8);
+		List<DataPoint> testSet = DataSet.getTestSet(dataSet, 0.3);
+		List<DataPoint> trainSet = DataSet.getTrainingSet(dataSet, 0.7);
 
 
 		// TASK 4: write a new method in DataSet.java which takes as arguments to DataPoint objects,
@@ -31,7 +31,7 @@ public class kNNMain{
 
 		// TASK 5: Use the KNNClassifier class to determine the k nearest neighbors to a given DataPoint,
 		// and print a predicted target label
-		KNNClassifier knn = new KNNClassifier(5);
+		KNNClassifier knn = new KNNClassifier(3);
 
 		String prediction = knn.predict(dataSet, point);
 
@@ -40,19 +40,20 @@ public class kNNMain{
 
 		// TASK 6: loop over the datapoints in the held out test set, and make predictions for Each
 		// point based on nearest neighbors in training set. Calculate accuracy of model.
-		DataPoint testPredict = dataSet.get(0);
-		double ctr = 0.;
+		DataPoint testPredict;
 		double[] accuracy = new double[1000];
     
-		for (int j=0;j<1000;j++)
+		for (int j=0;j<accuracy.length;j++)
 		{
-			ctr = 0;
-			List<DataPoint> trainer = DataSet.getTrainingSet(dataSet, 0.8);
+			double ctr = 0;
+			List<DataPoint> fullDataSet = DataSet.readDataSet(args[0]);
+			List<DataPoint> tester = DataSet.getTrainingSet(fullDataSet, 0.3);
+			List<DataPoint> trainer = DataSet.getTrainingSet(fullDataSet, 0.7);
 
         
-			for (int i=0; i<trainer.size();i++)
+			for (int i=0; i<tester.size();i++)
 			{
-				testPredict = trainer.get(i);
+				testPredict = tester.get(i);
             
 				String guess = knn.predict(trainer, testPredict);
 
@@ -60,16 +61,10 @@ public class kNNMain{
 					ctr++;
 			}
         
-			accuracy[j] = ctr / trainer.size() * 100;    
+			accuracy[j] = ctr / tester.size() * 100;    
 
 			System.out.println("Generation " + (j+1) + " : " + accuracy[j]);
 		}
-    
-		double sum = 0;
-   		for(int k=0;k<1000;k++)
-		{
-			sum += accuracy[k];
-   		}
 
 		double meanAccuracy = mean(accuracy);
 		double stdevAccuracy = standardDeviation(accuracy);
