@@ -42,26 +42,48 @@ public class kNNMain{
 		// point based on nearest neighbors in training set. Calculate accuracy of model.
 		DataPoint testPredict;
 		double[] accuracy = new double[1000];
+		double[] precision = new double[1000];
+		double[] recall = new double[1000];
+		double[] f1 = new double[1000];
     
 		for (int j=0;j<accuracy.length;j++)
 		{
-			double ctr = 0;
-			List<DataPoint> fullDataSet = DataSet.readDataSet(args[0]);
-			List<DataPoint> tester = DataSet.getTrainingSet(fullDataSet, 0.3);
-			List<DataPoint> trainer = DataSet.getTrainingSet(fullDataSet, 0.7);
+			double accuracyCtr = 0;
+			double tp = 0;
+			double fp = 0;
+			double fn = 0;
+
+			dataSet = DataSet.readDataSet(args[0]);
+			testSet = DataSet.getTrainingSet(dataSet, 0.3);
+			trainSet = DataSet.getTrainingSet(dataSet, 0.7);
 
         
-			for (int i=0; i<tester.size();i++)
+			for (int i=1; i<testSet.size();i++)
 			{
-				testPredict = tester.get(i);
+				testPredict = testSet.get(i);
             
-				String guess = knn.predict(trainer, testPredict);
+				String guess = knn.predict(trainSet, testPredict);
 
+				// Accuracy
 				if(guess.equals(testPredict.getLabel()))
-					ctr++;
+					accuracyCtr++;
+				
+				// Benign = positive, malignant = negative
+				// True positive
+				if (guess.equals("benign") && testPredict.getLabel().equals("benign"))
+					tp++;
+				// False positive
+				if (guess.equals("benign") && testPredict.getLabel().equals("malignant"))
+					fp++;
+				// False negative
+				if (guess.equals("malignant") && testPredict.getLabel().equals("benign"))
+					fn++;
+
 			}
-        
-			accuracy[j] = ctr / tester.size() * 100;    
+
+			accuracy[j] = accuracyCtr / testSet.size() * 100;
+			precision[j] = tp / (tp + fp);
+			recall[j] = tp / (tp + fn);
 
 			System.out.println("Generation " + (j+1) + " : " + accuracy[j]);
 		}
@@ -69,11 +91,24 @@ public class kNNMain{
 		double meanAccuracy = mean(accuracy);
 		double stdevAccuracy = standardDeviation(accuracy);
 
+		double meanPrecision = mean(precision);
+		double stdevPrecision = standardDeviation(precision);
+
+		double meanRecall = mean(recall);
+		double stdevRecall = standardDeviation(recall);
+
 		System.out.println("-----------------------------------\n");
 		System.out.println("Results over 1000 generation: ");
+		System.out.println();
 		System.out.println("Average accuracy: " + meanAccuracy);
-		System.out.println("Standard deviation:" + stdevAccuracy);
-
+		System.out.println("StDev accuracy:" + stdevAccuracy);
+		System.out.println();
+		System.out.println("Average precision:" + meanPrecision);
+		System.out.println("StDev precision:" + stdevPrecision);
+		System.out.println();
+		System.out.println("Average recall:" + meanRecall);
+		System.out.println("StDev recall:" + stdevRecall);
+		System.out.println();
 	}
 
 
